@@ -29,6 +29,12 @@
                             android:key="pref_screen_security"
                             android:title="@string/preferences__screen_security"
                             android:summary="@string/preferences__disable_screen_security_to_allow_screen_shots" />
+
+        <org.thoughtcrime.securesms.components.SwitchPreferenceCompat
+                            android:defaultValue="true"
+                            android:key="pref_view_msgs_from_list"
+                            android:title="@string/preferences__msg_view"
+                            android:summary="@string/preferences__show_messages_in_conversation_list" />
     </PreferenceCategory>
 
     <PreferenceCategory android:layout="@layout/preference_divider"/>

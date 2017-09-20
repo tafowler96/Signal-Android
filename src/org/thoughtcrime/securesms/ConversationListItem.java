@@ -36,11 +36,13 @@ import org.thoughtcrime.securesms.components.DeliveryStatusView;
 import org.thoughtcrime.securesms.components.FromTextView;
 import org.thoughtcrime.securesms.components.ThumbnailView;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
+import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.model.ThreadRecord;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientModifiedListener;
 import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.ResUtil;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
@@ -125,7 +127,13 @@ public class ConversationListItem extends RelativeLayout
     this.recipient.addListener(this);
     this.fromView.setText(recipient, read);
 
-    this.subjectView.setText(thread.getDisplayBody());
+    if (TextSecurePreferences.isMessageListViewEnabled(getContext())) {
+      this.subjectView.setText(thread.getDisplayBody());
+    }
+    else {
+      int unreadCount = DatabaseFactory.getMmsSmsDatabase(getContext()).getUnreadCount(thread.getThreadId());
+      this.subjectView.setText(getContext().getResources().getQuantityString(R.plurals.ConversationAdapter_n_unread_messages, unreadCount, unreadCount));
+    }
     this.subjectView.setTypeface(read ? LIGHT_TYPEFACE : BOLD_TYPEFACE);
 
     if (thread.getDate() > 0) {
